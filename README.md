@@ -1,74 +1,27 @@
 # benchmarks
 Benchmarks between defferent packages or languages 
 
-## http `hello world` Golang and C++ userver
-Golang code:
-```go
-package main
+## http `hello world`
 
-import (
-	"io"
-	"net/http"
-)
+Here are shown the results of benchmarks of a simple http server wich returns only `hello world` to the request.
+All tests was made on one machine. For detailed information see [Appendix](#appendix).
 
-func helloHandler(w http.ResponseWriter, r *http.Request) {
-	io.WriteString(w, "Hello world!")
-}
+| Framework                                                        | RPC   | Remark                                                               |
+|------------------------------------------------------------------|-------|----------------------------------------------------------------------|
+| Golang net/http                                                  | 61692 |                                                                      |
+| C++ userver [repo](https://github.com/userver-framework/userver) | 53483 | From Yandex                                                          |
+| C++ httplib [repo](https://github.com/yhirose/cpp-httplib)       | 406   | **Very simple library.** **This library uses 'blocking' socket I/O** |
 
-func main() {
-	http.HandleFunc("/hello", helloHandler)
-	http.ListenAndServe(":8090", nil)
-}
 
-```
+### Appendix
 
-C++ userver [code](https://github.com/userver-framework/userver/blob/develop/samples/hello_service/hello_service.cpp)
-```C++
-#include <userver/utest/using_namespace_userver.hpp>
-
-/// [Hello service sample - component]
-#include <userver/components/minimal_server_component_list.hpp>
-#include <userver/server/handlers/http_handler_base.hpp>
-#include <userver/utils/daemon_run.hpp>
-
-namespace samples::hello {
-
-class Hello final : public server::handlers::HttpHandlerBase {
- public:
-  // `kName` is used as the component name in static config
-  static constexpr std::string_view kName = "handler-hello-sample";
-
-  // Component is valid after construction and is able to accept requests
-  using HttpHandlerBase::HttpHandlerBase;
-
-  std::string HandleRequestThrow(
-      const server::http::HttpRequest&,
-      server::request::RequestContext&) const override {
-    return "Hello world!\n";
-  }
-};
-
-}  // namespace samples::hello
-/// [Hello service sample - component]
-
-/// [Hello service sample - main]
-int main(int argc, char* argv[]) {
-  const auto component_list =
-      components::MinimalServerComponentList().Append<samples::hello::Hello>();
-  return utils::DaemonMain(argc, argv, component_list);
-}
-/// [Hello service sample - main]
-```
-
-benchmark command
+Benchmark command
 ```bash
 ab -c 1000 -n 100000 -k localhost:8080/hello
 ```
 
-### Results
-
-```
-Golang
+```bash
+# Golang net/http
 #############################################
 
 Server Software:        
@@ -107,11 +60,12 @@ Percentage of the requests served within a certain time (ms)
   98%     17
   99%     35
  100%     64 (longest request)
+```
 
-#############################################
-#############################################
 
-C++ userver
+
+```bash
+# C++ userver
 #############################################
 Server Software:        userver/1.0.0
 Server Hostname:        localhost
@@ -149,7 +103,47 @@ Percentage of the requests served within a certain time (ms)
   98%     19
   99%     29
  100%     91 (longest request)
-
 ```
 
 C++ show enough good results, but for a `simple` http server golang seems is a little bit faster.
+
+```bash
+# C++ httplib
+#############################################
+Server Software:        
+Server Hostname:        localhost
+Server Port:            8080
+
+Document Path:          /hello
+Document Length:        13 bytes
+
+Concurrency Level:      1000
+Time taken for tests:   30.007 seconds
+Complete requests:      12197
+Failed requests:        0
+Keep-Alive requests:    9761
+Total transferred:      1291430 bytes
+HTML transferred:       158561 bytes
+Requests per second:    406.47 [#/sec] (mean)
+Time per request:       2460.233 [ms] (mean)
+Time per request:       2.460 [ms] (mean, across all concurrent requests)
+Transfer rate:          42.03 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    3   9.0      0      52
+Processing:     0 1964 4203.1     44   12208
+Waiting:        0 1937 4215.3      0   12208
+Total:          0 1966 4204.8     44   12208
+
+Percentage of the requests served within a certain time (ms)
+  50%     44
+  66%     47
+  75%     48
+  80%     65
+  90%  12116
+  95%  12147
+  98%  12168
+  99%  12176
+ 100%  12208 (longest request)
+```
