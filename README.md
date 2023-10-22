@@ -3,21 +3,29 @@ Benchmarks between defferent packages or languages
 
 ## http `hello world`
 
-Here are shown the results of benchmarks of a simple http server wich returns only `hello world` to the request.
+Here are shown the benchmarks results of a simple http server which returns only `hello world` to the request.
 All tests was made on one machine. For detailed information see [Appendix](#appendix).
 
-| Framework                                                        | RPC   | Remark                                                               |
-|------------------------------------------------------------------|-------|----------------------------------------------------------------------|
-| Golang net/http                                                  | 61692 |                                                                      |
-| C++ userver [repo](https://github.com/userver-framework/userver) | 53483 | From Yandex                                                          |
-| C++ httplib [repo](https://github.com/yhirose/cpp-httplib)       | 406   | **Very simple library.** **This library uses 'blocking' socket I/O** |
+| Framework        | RPC              | Remark          |
+|------------------|------------------|-----------------|
+| Golang net/http  | 61692            |                 |
+| nginx 1.18.0     | 53590            | Easy start.     |
+| C++ userver [repo](https://github.com/userver-framework/userver) | 53483 | From Yandex. |
+| Golang fasthttp  | 51947            | Not such fast how do you think.    |
+| Golang gin-gonic | 50970            | Not great not terrible             |
+| node v18.18.0 turbo-http | 42984 |                                       |
+| node v18.18.0 express    | 9100  |                                       |
+| node v18.18.0 http       | 6065  |                                       |
+| C++ httplib [repo](https://github.com/yhirose/cpp-httplib)       | 406   | **Very simple library.** **This library uses 'blocking' socket I/O.** |
 
 
 ### Appendix
 
+Processor: AMD® Ryzen 5 4600h with radeon graphics × 12
+
 Benchmark command
 ```bash
-ab -c 1000 -n 100000 -k localhost:8080/hello
+ab -c 1000 -n 100000 -k http://localhost:8080/hello
 ```
 
 ```bash
@@ -63,6 +71,46 @@ Percentage of the requests served within a certain time (ms)
 ```
 
 
+```bash
+# nginx 1.18
+erver Software:        nginx/1.18.0
+Server Hostname:        localhost
+Server Port:            80
+
+Document Path:          /hello
+Document Length:        14 bytes
+
+Concurrency Level:      1000
+Time taken for tests:   1.866 seconds
+Complete requests:      100000
+Failed requests:        0
+Keep-Alive requests:    99538
+Total transferred:      21097690 bytes
+HTML transferred:       1400000 bytes
+Requests per second:    53590.40 [#/sec] (mean)
+Time per request:       18.660 [ms] (mean)
+Time per request:       0.019 [ms] (mean, across all concurrent requests)
+Transfer rate:          11041.34 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   3.9      0      68
+Processing:     0   18   2.5     18      68
+Waiting:        0   18   2.6     18      35
+Total:          0   18   4.8     18      86
+
+Percentage of the requests served within a certain time (ms)
+  50%     18
+  66%     18
+  75%     18
+  80%     18
+  90%     19
+  95%     19
+  98%     30
+  99%     40
+ 100%     86 (longest request)
+```
+
 
 ```bash
 # C++ userver
@@ -106,6 +154,215 @@ Percentage of the requests served within a certain time (ms)
 ```
 
 C++ show enough good results, but for a `simple` http server golang seems is a little bit faster.
+
+```bash
+# Golang fasthttp
+#############################################
+Server Software:        fasthttp
+Server Hostname:        localhost
+Server Port:            8080
+
+Document Path:          /hello
+Document Length:        15 bytes
+
+Concurrency Level:      1000
+Time taken for tests:   1.925 seconds
+Complete requests:      100000
+Failed requests:        0
+Keep-Alive requests:    100000
+Total transferred:      17400000 bytes
+HTML transferred:       1500000 bytes
+Requests per second:    51947.03 [#/sec] (mean)
+Time per request:       19.250 [ms] (mean)
+Time per request:       0.019 [ms] (mean, across all concurrent requests)
+Transfer rate:          8826.94 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   3.8      0      64
+Processing:     8   18   0.9     18      64
+Waiting:        0   18   0.8     18      38
+Total:          8   19   3.9     18      83
+
+Percentage of the requests served within a certain time (ms)
+  50%     18
+  66%     19
+  75%     19
+  80%     19
+  90%     19
+  95%     19
+  98%     20
+  99%     39
+ 100%     83 (longest request)
+```
+
+```bash
+# Golang gin-gonic
+#############################################
+Server Software:        
+Server Hostname:        localhost
+Server Port:            8080
+
+Document Path:          /hello
+Document Length:        31 bytes
+
+Concurrency Level:      1000
+Time taken for tests:   1.962 seconds
+Complete requests:      100000
+Failed requests:        0
+Keep-Alive requests:    100000
+Total transferred:      17200000 bytes
+HTML transferred:       3100000 bytes
+Requests per second:    50970.27 [#/sec] (mean)
+Time per request:       19.619 [ms] (mean)
+Time per request:       0.020 [ms] (mean, across all concurrent requests)
+Transfer rate:          8561.41 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   4.1      0      70
+Processing:     8   19   1.1     19      70
+Waiting:        0   19   1.1     19      23
+Total:          8   19   4.5     19      91
+
+Percentage of the requests served within a certain time (ms)
+  50%     19
+  66%     19
+  75%     19
+  80%     19
+  90%     20
+  95%     21
+  98%     21
+  99%     45
+ 100%     91 (longest request)
+```
+
+```bash
+# node v18.18.0 turbo-http
+#############################################
+Server Software:        
+Server Hostname:        127.0.0.1
+Server Port:            8080
+
+Document Path:          /hello
+Document Length:        18 bytes
+
+Concurrency Level:      1000
+Time taken for tests:   2.326 seconds
+Complete requests:      100000
+Failed requests:        0
+Keep-Alive requests:    100000
+Total transferred:      8900000 bytes
+HTML transferred:       1800000 bytes
+Requests per second:    42984.04 [#/sec] (mean)
+Time per request:       23.264 [ms] (mean)
+Time per request:       0.023 [ms] (mean, across all concurrent requests)
+Transfer rate:          3735.92 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   3.4      0      63
+Processing:    10   22   2.2     22      63
+Waiting:        0   22   2.1     22      47
+Total:         10   23   4.1     22      82
+
+Percentage of the requests served within a certain time (ms)
+  50%     22
+  66%     23
+  75%     23
+  80%     24
+  90%     24
+  95%     26
+  98%     31
+  99%     50
+ 100%     82 (longest request)
+```
+
+```bash
+# node v18.18.0 express
+#############################################
+Server Software:        
+Server Hostname:        localhost
+Server Port:            8080
+
+Document Path:          /hello
+Document Length:        144 bytes
+
+Concurrency Level:      1000
+Time taken for tests:   10.988 seconds
+Complete requests:      100000
+Failed requests:        0
+Non-2xx responses:      100000
+Keep-Alive requests:    100000
+Total transferred:      41600000 bytes
+HTML transferred:       14400000 bytes
+Requests per second:    9100.57 [#/sec] (mean)
+Time per request:       109.883 [ms] (mean)
+Time per request:       0.110 [ms] (mean, across all concurrent requests)
+Transfer rate:          3697.11 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    1  13.6      0    1026
+Processing:    17  108 682.5     60   10867
+Waiting:        7  108 682.5     60   10867
+Total:         18  108 686.5     60   10914
+
+Percentage of the requests served within a certain time (ms)
+  50%     60
+  66%     63
+  75%     64
+  80%     66
+  90%     71
+  95%     77
+  98%     92
+  99%    104
+ 100%  10914 (longest request)
+
+```
+
+```bash
+# node v18.18.0 http
+# was used -r key in ab command
+# ab -c 1000 -n 100000 -rk http://127.0.0.1:8080/hello
+#############################################
+Server Software:        
+Server Hostname:        127.0.0.1
+Server Port:            8080
+
+Document Path:          /hello
+Document Length:        11 bytes
+
+Concurrency Level:      1000
+Time taken for tests:   16.487 seconds
+Complete requests:      100000
+Failed requests:        0
+Keep-Alive requests:    0
+Total transferred:      11200000 bytes
+HTML transferred:       1100000 bytes
+Requests per second:    6065.33 [#/sec] (mean)
+Time per request:       164.872 [ms] (mean)
+Time per request:       0.165 [ms] (mean, across all concurrent requests)
+Transfer rate:          663.39 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    8 177.7      0    7296
+Processing:    20   69 271.6     61   13508
+Waiting:        1   69 271.6     61   13507
+Total:         50   77 389.4     61   16361
+
+Percentage of the requests served within a certain time (ms)
+  50%     61
+  66%     61
+  75%     62
+  80%     62
+  90%     65
+  95%     67
+  98%     70
+  99%     91
+ 100%  16361 (longest request)
+```
 
 ```bash
 # C++ httplib
