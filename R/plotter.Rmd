@@ -1,0 +1,32 @@
+---
+
+---
+
+```{r}
+library(ggplot2)
+```
+
+```{r}
+c_data <- read.csv("../cblas/res_c.csv")
+go_data <- read.csv("../goblas/res_go.csv")
+```
+
+```{r}
+c_data
+
+```
+
+![]()
+
+```{r}
+theme_update(text = element_text(size = 16))
+
+ggplot(data=c_data, aes(x=size, y=time, color="c blas")) +
+  geom_line()+
+  geom_point() +
+geom_line(data=go_data, aes(x=size, y=time, color="go blas")) +
+geom_point(data=go_data, aes(x=size, y=time, color="go blas"))+
+    xlab("N, matrix size is NxN")+
+    ylab ("time, [s]")+
+    ggtitle("Compare blas GEMM in C and Go")
+```

@@ -19,6 +19,13 @@ All tests was made on one machine. For detailed information see [Appendix](#appe
 | C++ httplib [repo](https://github.com/yhirose/cpp-httplib)       | 406   | **Very simple library.** **This library uses 'blocking' socket I/O.** |
 
 
+## BLAS GEMM
+The comparison results of simple matrix multiplication with [blas](https://www.netlib.org/blas/) library in Golang and C are presented on the graph.  Source code are in folders `goblas` and `cblas`.
+![image](./figures/c_vs_go_gemm.png)
+
+
+This performance gap is due to (dgemmParallel)[https://github.com/gonum/gonum/blob/master/blas/gonum/dgemm.go#L124] parallelism.
+
 ### Appendix
 
 Processor: AMD® Ryzen 5 4600h with radeon graphics × 12
