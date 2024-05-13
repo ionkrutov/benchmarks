@@ -24,7 +24,7 @@ The comparison results of simple matrix multiplication with [blas](https://www.n
 ![image](./figures/c_vs_go_gemm.png)
 
 
-This performance gap is due to (dgemmParallel)[https://github.com/gonum/gonum/blob/master/blas/gonum/dgemm.go#L124] parallelism.
+This performance gap is due to [dgemmParallel](https://github.com/gonum/gonum/blob/master/blas/gonum/dgemm.go#L124) parallelism.
 
 ### Appendix
 
