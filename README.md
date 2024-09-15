@@ -16,6 +16,8 @@ All tests was made on one machine. For detailed information see [Appendix](#appe
 | node v18.18.0 turbo-http | 42984 |                                       |
 | node v18.18.0 express    | 9100  |                                       |
 | node v18.18.0 http       | 6065  |                                       |
+| tornado 6.4.1            | 4116  | The result in single thread mode.     |
+| python http.server       | 3265  | Didn't handle all requests.           |
 | C++ httplib [repo](https://github.com/yhirose/cpp-httplib)       | 406   | **Very simple library.** **This library uses 'blocking' socket I/O.** |
 
 
@@ -369,6 +371,92 @@ Percentage of the requests served within a certain time (ms)
   98%     70
   99%     91
  100%  16361 (longest request)
+```
+
+```bash
+# tornado 6.4
+############################################
+
+Server Software:        TornadoServer/6.4.1
+Server Hostname:        localhost
+Server Port:            8080
+
+Document Path:          /hello
+Document Length:        13 bytes
+
+Concurrency Level:      1000
+Time taken for tests:   24.294 seconds
+Complete requests:      100000
+Failed requests:        0
+Keep-Alive requests:    100000
+Total transferred:      23200000 bytes
+HTML transferred:       1300000 bytes
+Requests per second:    4116.24 [#/sec] (mean)
+Time per request:       242.940 [ms] (mean)
+Time per request:       0.243 [ms] (mean, across all concurrent requests)
+Transfer rate:          932.59 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    2  39.6      0    1070
+Processing:    26  240  47.4    217     555
+Waiting:        1  240  47.4    217     555
+Total:         26  242  66.0    217    1624
+
+Percentage of the requests served within a certain time (ms)
+  50%    217
+  66%    241
+  75%    248
+  80%    254
+  90%    322
+  95%    347
+  98%    377
+  99%    389
+ 100%   1624 (longest request)
+
+```
+
+```bash
+# python http.server
+#############################################
+Server Software:        SimpleHTTP/0.6
+Server Hostname:        localhost
+Server Port:            8080
+
+Document Path:          /hello
+Document Length:        12 bytes
+
+Concurrency Level:      1000
+Time taken for tests:   30.351 seconds
+Complete requests:      99124
+Failed requests:        3
+   (Connect: 0, Receive: 1, Length: 1, Exceptions: 1)
+Keep-Alive requests:    0
+Total transferred:      13084236 bytes
+HTML transferred:       1189476 bytes
+Requests per second:    3265.91 [#/sec] (mean)
+Time per request:       306.194 [ms] (mean)
+Time per request:       0.306 [ms] (mean, across all concurrent requests)
+Transfer rate:          420.99 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    9 180.4      0   11236
+Processing:     0    7 179.6      1   15157
+Waiting:        0    7 173.1      1   15157
+Total:          0   16 288.5      1   16201
+
+Percentage of the requests served within a certain time (ms)
+  50%      1
+  66%      1
+  75%      1
+  80%      1
+  90%      1
+  95%      1
+  98%      1
+  99%      2
+ 100%  16201 (longest request)
+
 ```
 
 ```bash

@@ -1,3 +1,4 @@
 *node_modules*
 .Rproj.user
 a.out
+.venv/
