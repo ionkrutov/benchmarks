@@ -14,6 +14,7 @@ All tests was made on one machine. For detailed information see [Appendix](#appe
 | Golang fasthttp  | 51947            | Not such fast how do you think.    |
 | Golang gin-gonic | 50970            | Not great not terrible             |
 | node v18.18.0 turbo-http | 42984 |                                       |
+| rust                     | 10706 | With async                            |
 | node v18.18.0 express    | 9100  |                                       |
 | node v18.18.0 http       | 6065  |                                       |
 | tornado 6.4.1            | 4116  | The result in single thread mode.     |
@@ -285,6 +286,48 @@ Percentage of the requests served within a certain time (ms)
   98%     31
   99%     50
  100%     82 (longest request)
+```
+
+
+```bash
+# rust with async
+#############################################
+Server Software:        
+Server Hostname:        127.0.0.1
+Server Port:            8080
+
+Document Path:          /
+Document Length:        13 bytes
+
+Concurrency Level:      1000
+Time taken for tests:   9.340 seconds
+Complete requests:      100000
+Failed requests:        0
+Keep-Alive requests:    0
+Total transferred:      3200000 bytes
+HTML transferred:       1300000 bytes
+Requests per second:    10706.58 [#/sec] (mean)
+Time per request:       93.401 [ms] (mean)
+Time per request:       0.093 [ms] (mean, across all concurrent requests)
+Transfer rate:          334.58 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0   48  88.3     40    1087
+Processing:    11   45  14.6     46      75
+Waiting:        0   18  14.4     14      71
+Total:         36   93  88.9     92    1147
+
+Percentage of the requests served within a certain time (ms)
+  50%     92
+  66%     93
+  75%     94
+  80%     95
+  90%     96
+  95%     97
+  98%     99
+  99%     99
+ 100%   1147 (longest request)
 ```
 
 ```bash

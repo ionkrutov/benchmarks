@@ -2,3 +2,5 @@
 .Rproj.user
 a.out
 .venv/
+/rust/target*
+*.lock
