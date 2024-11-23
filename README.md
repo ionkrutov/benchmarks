@@ -15,6 +15,7 @@ All tests was made on one machine. For detailed information see [Appendix](#appe
 | Golang gin-gonic | 50970            | Not great not terrible             |
 | node v18.18.0 turbo-http | 42984 |                                       |
 | rust                     | 10706 | With async                            |
+| Java 21.0.5              | 10476 | The package `sun.net` gave the same results. |
 | node v18.18.0 express    | 9100  |                                       |
 | node v18.18.0 http       | 6065  |                                       |
 | tornado 6.4.1            | 4116  | The result in single thread mode.     |
@@ -328,6 +329,46 @@ Percentage of the requests served within a certain time (ms)
   98%     99
   99%     99
  100%   1147 (longest request)
+```
+
+```bash
+# java 21.0.5
+Server Software:        
+Server Hostname:        localhost
+Server Port:            8080
+
+Document Path:          /hello
+Document Length:        16 bytes
+
+Concurrency Level:      1000
+Time taken for tests:   9.545 seconds
+Complete requests:      100000
+Failed requests:        0
+Keep-Alive requests:    0
+Total transferred:      5800000 bytes
+HTML transferred:       1600000 bytes
+Requests per second:    10476.67 [#/sec] (mean)
+Time per request:       95.450 [ms] (mean)
+Time per request:       0.095 [ms] (mean, across all concurrent requests)
+Transfer rate:          593.41 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0   48  73.1     42    1080
+Processing:    15   47  13.1     48      83
+Waiting:        6   25  10.3     24      81
+Total:         47   95  73.8     94    1158
+
+Percentage of the requests served within a certain time (ms)
+  50%     94
+  66%     95
+  75%     95
+  80%     96
+  90%     96
+  95%     97
+  98%     98
+  99%     99
+ 100%   1158 (longest request)
 ```
 
 ```bash

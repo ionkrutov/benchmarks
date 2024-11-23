@@ -6,10 +6,10 @@ import (
 )
 
 func helloHandler(w http.ResponseWriter, r *http.Request) {
-	io.WriteString(w, "Hello world!")
+	io.WriteString(w, "Hello world!\n")
 }
 
 func main() {
 	http.HandleFunc("/hello", helloHandler)
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe("0.0.0.0:8080", nil)
 }

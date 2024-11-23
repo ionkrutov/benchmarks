@@ -4,3 +4,5 @@ a.out
 .venv/
 /rust/target*
 *.lock
+*package-lock.json
+*.class
